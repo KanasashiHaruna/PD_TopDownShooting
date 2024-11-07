@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    
+    [Header("シーン切り替え")]
+    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] float fadeSpeed = 0.5f;
+    [SerializeField] Text gameClear;
+    [SerializeField] Text space;
+    [SerializeField] private bool isReset = false;
+    [SerializeField] PlayerMove player;
+
 
     // Start is called beforf;he first frame update
     void Start()
@@ -18,6 +27,30 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if (player.transform.position.z >= 70.0f)
+        {
+            FeadAction();
+        }
+        if(isReset && Input.GetKeyDown(KeyCode.Space))
+        {
+            ResetScene();
+        }
+    }
+
+    void FeadAction()
+    {
+        canvasGroup.alpha += fadeSpeed * Time.deltaTime;
+        if (canvasGroup.alpha >= 1.0f)
+        {
+            canvasGroup.alpha = 1.0f;
+            gameClear.gameObject.SetActive(true);
+            space.gameObject.SetActive(true);
+            isReset = true;
+        }
+    }
+
+    void ResetScene()
+    {
+        SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); // 現在のシーンを再読み込み
     }
 }

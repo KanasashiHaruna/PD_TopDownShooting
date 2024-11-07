@@ -8,11 +8,14 @@ TagManager:
   - GunPosition
   - Hand
   - Gun
+  - Wall
+  - Switch
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - floorLayerMask
   - Water
   - UI
   - 

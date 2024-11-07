@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using static Unity.VisualScripting.Metadata;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -11,10 +10,12 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float moveSpeed = 3.0f;
     [SerializeField] private Vector3 distance;
     [SerializeField] Rigidbody rb;
+    [SerializeField] private float angleSpeed = 4.0f;
+
 
     [Header("プレイヤーが弾を撃つ関連")]
-    [SerializeField] HandScript hand;          //ハンドのオブジェクト
-    [SerializeField] GameObject handPosition;  //銃をくっつけるオブジェクト(ハンド)
+    [SerializeField] HandScript hand;                //ハンドのオブジェクト
+    [SerializeField] GameObject handPosition;        //銃をくっつけるオブジェクト(ハンド)
     [SerializeField] private float fireRate = 1.0f;  //射撃間隔
     private float fireTime = 0f;
 
@@ -24,13 +25,25 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        //rb = GetComponent<Rigidbody>();
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        //方向-------------------
+        Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        //
+        if(Physics.Raycast(ray, out hit, 100.0f))
+        {
+            Vector3 targetPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+        
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angleSpeed);
+        }
+       
         //移動--------------------
         Move();
 
@@ -90,8 +103,10 @@ public class PlayerMove : MonoBehaviour
             //銃オブジェクトから GunScript コンポーネントを取得
             if (collision.gameObject.TryGetComponent(out gun))
             {
+                Vector3 gunPosition = new Vector3(0.05f, 0.1f, 0.1f); // ここで銃の位置を指定
+                Quaternion gunRotation = Quaternion.Euler(0, 0, 0);
                 //プレイヤーの手に銃をセット
-                hand.SetGun(gun);
+                hand.SetGun(gun,gunPosition,gunRotation);
             }
             else
             {
