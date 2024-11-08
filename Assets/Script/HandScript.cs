@@ -5,6 +5,7 @@ using UnityEngine;
 public class HandScript : MonoBehaviour
 {
     GunScript gun;
+    public LayerMask floorLayerMask;
     //public bool isShot = false;
     public bool isParent{ get { return transform.childCount >= 1; } }
     // Start is called before the first frame update
@@ -22,21 +23,23 @@ public class HandScript : MonoBehaviour
 
     void RotateHandTowardsMouse()
     {
-        // マウスの位置をワールド座標系で取得
+     
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        RaycastHit hit;
         
-        if (plane.Raycast(ray, out float distance)) {
-            Vector3 mousePosition = ray.GetPoint(distance); 
+       if (Physics.Raycast(ray, out hit, 100.0f, floorLayerMask))
+       {
+            float h = transform.position.y;  //高さ
+            Vector3 direction = ray.direction * -1;
+            float theta = Mathf.Acos(Vector3.Dot(direction, Vector3.up));
 
-            // ハンドからマウスの位置への方向を計算
-            Vector3 direction = mousePosition - transform.position;
-            direction.y = 0;// ハンドが水平方向にのみ回転するようにする
+            float s = h/Mathf.Cos(theta);
+            Vector3 a = (hit.point - (direction * s));
 
-            // 角度を計算して回転を適用
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f); // スムーズな回転のための補間
-        }
+            transform.LookAt(a);
+
+       }
+
     }
 
     //銃をハンドにつける
