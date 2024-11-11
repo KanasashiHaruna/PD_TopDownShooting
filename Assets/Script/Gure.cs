@@ -51,7 +51,6 @@ public class Gure : MonoBehaviour
             camera.StartShake(0.5f, 0.5f);
             Destroy(this.gameObject);
             collision.gameObject.GetComponent<Enemy>().DecreaseHp(5.0f);
-            //Destroy(collision.gameObject);
             Explosion obj = Instantiate(ex, transform.position, Quaternion.identity);
         }
     }

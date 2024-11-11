@@ -74,14 +74,6 @@ public class GunScript : MonoBehaviour
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     hit.collider.gameObject.GetComponent<Enemy>().DecreaseHp(1.0f);
-                    
-                }
-
-                if (hit.collider.CompareTag("Bom"))
-                {
-                    Destroy(hit.collider.gameObject);
-                    camera.StartShake(0.5f, 0.5f);
-                    Explosion objEx=Instantiate(explosion, hit.collider.transform.position, Quaternion.identity);  
 
                 }
             }
