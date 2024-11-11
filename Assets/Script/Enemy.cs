@@ -45,11 +45,11 @@ public class Enemy : MonoBehaviour
     {
         #region HpŠÇ—
         //“G‚ÌHPŠÇ—-----------------------------
-        if (Hp <= 0)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        //if (Hp <= 0)
+        //{
+        //    Destroy(gameObject);
+        //    return;
+        //}
         #endregion
 
         #region “G‚Ì‹–ì
@@ -144,7 +144,16 @@ public class Enemy : MonoBehaviour
     currentTargetIndex = (currentTargetIndex + 1) % targets.Length;
     }
 
-     void Fire()
+    public void DecreaseHp(float amount)
+    {
+        Hp -= amount; if (Hp <= 0)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+        void Fire()
      {
 
          //’e‚ğŒ‚‚Â-----------------------------------------------------------

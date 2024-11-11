@@ -53,7 +53,8 @@ public class Explosion : MonoBehaviour
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     camera.StartShake(0.5f, 0.5f);
-                    Destroy(hit.collider.gameObject);
+                    hit.collider.gameObject.GetComponent<Enemy>().DecreaseHp(5.0f);
+                    //Destroy(hit.collider.gameObject);
                     Instantiate(this.gameObject, hit.transform.position, Quaternion.identity);
                 }
             }

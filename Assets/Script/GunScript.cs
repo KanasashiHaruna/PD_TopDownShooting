@@ -10,7 +10,7 @@ public class GunScript : MonoBehaviour
     [SerializeField] public GunBulletScript bullet;　　//弾
     [SerializeField] public Transform shotPosition; 　//発射位置
     [SerializeField] public  float range = 50.0f;      //レイの飛ぶ距離
-    [SerializeField] Enemy enemy;
+    //Enemy enemy;
     [SerializeField] PlayerMove player;
     [SerializeField] public float shotInterval = 1.0f;
     public float lastShotTime = 0.0f;
@@ -73,7 +73,8 @@ public class GunScript : MonoBehaviour
 
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    enemy.Hp -= 1.0f;
+                    hit.collider.gameObject.GetComponent<Enemy>().DecreaseHp(1.0f);
+                    
                 }
 
                 if (hit.collider.CompareTag("Bom"))
