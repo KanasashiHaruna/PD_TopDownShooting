@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
 
     void ResetScene()
     {
-        SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); // 現在のシーンを再読み込み
+        SceneManager.LoadScene("reveluUp", LoadSceneMode.Single); // 現在のシーンを再読み込み
     }
 
     

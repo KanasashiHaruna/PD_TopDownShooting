@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/reveluUp.unity
+    guid: 7fe810d087c39e043a01df59443cdbce
   m_configObjects: {}
