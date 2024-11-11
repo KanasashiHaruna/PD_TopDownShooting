@@ -16,8 +16,8 @@ public class PlayerMove : MonoBehaviour
     [Header("プレイヤーが弾を撃つ関連")]
     [SerializeField] HandScript hand;                //ハンドのオブジェクト
     [SerializeField] GameObject handPosition;        //銃をくっつけるオブジェクト(ハンド)
-    [SerializeField] private float fireRate = 1.0f;  //射撃間隔
-    private float fireTime = 0f;
+    //[SerializeField] private float fireRate = 1.0f;  //射撃間隔
+    //private float fireTime = 0f;
 
     // Start is called before the first frame update
 
@@ -50,10 +50,10 @@ public class PlayerMove : MonoBehaviour
         //弾を撃つ----------------
         if (hand.isParent)
         {
-            if (Input.GetMouseButton(0) && Time.time>=fireTime)
+            if (Input.GetMouseButton(0))
             {
                 hand.Fire();
-                fireTime = Time.time + fireRate;
+                //fireTime = Time.time + fireRate;
             }
         }
         

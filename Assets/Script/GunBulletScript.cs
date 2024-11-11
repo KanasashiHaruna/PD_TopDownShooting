@@ -48,7 +48,7 @@ public class GunBulletScript : MonoBehaviour
     void Update()
     {
         //弾の動き
-        rb.velocity = direction*speed;
+        rb.velocity = direction * speed;
 
         //レイの位置---------------------------------
         //開始位置の計算更新
@@ -60,11 +60,11 @@ public class GunBulletScript : MonoBehaviour
         traveledDistance += speed * Time.deltaTime;
 
 
-        if(Vector3.Distance(start, end) < 0.1f)
+        if (Vector3.Distance(start, end) < 0.1f)
         {
             Destroy(gameObject);
         }
-        
+
     }
 
     public void SetUp(Vector3 startPosition, Vector3 endPosition)
@@ -73,4 +73,13 @@ public class GunBulletScript : MonoBehaviour
         lineRenderer.SetPosition(1, endPosition);
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+       if (collision.gameObject.CompareTag("Wall"))
+       {
+           Destroy(gameObject);
+           Destroy(lineRenderer);
+       }
+       
+    }
 }

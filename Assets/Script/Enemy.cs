@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     [Header("’e‚ğŒ‚‚ÂŠÖ˜A")]
     [SerializeField] EnemyGun gun;
     [SerializeField] private float time;
-    [SerializeField] private float shotTime = 1.0f;
+    [SerializeField] private float shotTime = 0.3f;
 
     [Header("ƒvƒŒƒCƒ„[‚ğ’T‚·‹““®")]
     [SerializeField] private float rotateAngle = 45.0f;    //’T‚·‚Æ‚«‚Ç‚ê‚­‚ç‚¢U‚èŒü‚­‚©
@@ -27,9 +27,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float serchCount = 0.0f;
     [SerializeField] private float rotateSec = 2.0f;       //‰½•b‘‚¯‚Ä‰ñ“]‚·‚é‚©
     [SerializeField] private float rotateCount = 0.0f;     //‰ñ“]‚·‚é•b”
-    [SerializeField] private bool isSerching = false;    //’T‚·‚©‚Ç‚¤‚©
+    //[SerializeField] private bool isSerching = false;    //’T‚·‚©‚Ç‚¤‚©
     [SerializeField] private bool isLeftRotate = true;   //¶‰ñ“]‚·‚é‚©‚Ç‚¤‚©
-    [SerializeField] private bool isFind = false;
+    //[SerializeField] private bool isFind = false;
 
     // Start is called before the first frame update
     void Start()
@@ -63,26 +63,21 @@ public class Enemy : MonoBehaviour
         #endregion
 
         //--------------------------------------------------
-        #region ‹–ì“àBŒ©‚Â‚¯‚Ä‚é‰Â”\«
+        #region ‹–ì“àBŒ©‚Â‚¯‚Ä‚é‚©‚à
         if (theta < angle)
         {
-
-            Debug.Log("‹–ì“à");
             Ray ray = new Ray(transform.position, direction);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.CompareTag("Player"))
                 {
-                    Debug.Log("UŒ‚‚·‚é");
-
                     //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ğŒü‚­-------------------------------------------
                     float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, targetAngle, 0);
 
                     Fire();
                     navmeshAgent.isStopped = true;
-                    isFind = true;
                     serchCount = serchTime;
 
                 }
@@ -98,10 +93,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Debug.Log("’TõI—¹");
-            isSerching = false;
             navmeshAgent.isStopped = false;
-           // MoveToNextTarget();
         }
 
         if (!navmeshAgent.pathPending && navmeshAgent.remainingDistance < 0.5f)
@@ -112,56 +104,56 @@ public class Enemy : MonoBehaviour
     }
 
 
+    //’T‚·‹““®--------------------------------------------
+     void Serch()
+     {
 
-        void Serch()
-        {
+         if (isLeftRotate)//¶‰ñ“]‚·‚é
+         {
+             float r = -(rotateAngle / rotateSec * Time.deltaTime);
+             transform.Rotate(0.0f, r, 0.0f);
+             rotateCount += Time.deltaTime;
+         }
+         if (rotateCount >= rotateSec)
+         {
+             isLeftRotate = false;
+             rotateCount = 0.0f;
+         }
 
-            if (isLeftRotate)//¶‰ñ“]‚·‚é
-            {
-                float r = -(rotateAngle / rotateSec * Time.deltaTime);
-                transform.Rotate(0.0f, r, 0.0f);
-                rotateCount += Time.deltaTime;
-            }
-            if (rotateCount >= rotateSec)
-            {
-                isLeftRotate = false;
-                rotateCount = 0.0f;
-            }
+         //--------------------------------------------------
+         if (isLeftRotate == false)
+         {
+             //‰E‰ñ“]‚µ‚Ä
+             transform.Rotate(0.0f, (rotateAngle / rotateSec * Time.deltaTime), 0.0f);
+             rotateCount += Time.deltaTime;
+         }
+         if (rotateCount >= rotateSec)
+         {
+             isLeftRotate = true;
+             rotateCount = 0.0f;
+         }
+     }
 
-            //--------------------------------------------------
-            if (isLeftRotate == false)
-            {
-                //‰E‰ñ“]‚µ‚Ä
-                transform.Rotate(0.0f, (rotateAngle / rotateSec * Time.deltaTime), 0.0f);
-                rotateCount += Time.deltaTime;
-            }
-            if (rotateCount >= rotateSec)
-            {
-                isLeftRotate = true;
-                rotateCount = 0.0f;
-            }
+    //ƒiƒrƒƒbƒVƒ…‚ÌˆÚ“®---------------------------------
+    void MoveToNextTarget()
+    {
+        if (navmeshAgent.isStopped) { return; }
+    if (targets.Length == 0) { return; }
+        // Ÿ‚Ìƒ^[ƒQƒbƒg‚ÉˆÚ“®
+        navmeshAgent.destination = targets[currentTargetIndex].position; 
+    currentTargetIndex = (currentTargetIndex + 1) % targets.Length;
+    }
 
+     void Fire()
+     {
 
-        }
-        void MoveToNextTarget()
-        {
-            if (navmeshAgent.isStopped) { return; }
-        if (targets.Length == 0) { return; }
-            // Ÿ‚Ìƒ^[ƒQƒbƒg‚ÉˆÚ“®
-            navmeshAgent.destination = targets[currentTargetIndex].position; 
-        currentTargetIndex = (currentTargetIndex + 1) % targets.Length;
-        }
+         //’e‚ğŒ‚‚Â-----------------------------------------------------------
+         time += Time.deltaTime;
+         if (time >= shotTime)
+         {
+           gun.Shot();
+           time = time - shotTime;
 
-        void Fire()
-        {
-
-            //’e‚ğŒ‚‚Â-----------------------------------------------------------
-            time += Time.deltaTime;
-            if (time >= shotTime)
-            {
-                gun.Shot();
-                time = time - shotTime;
-
-            }
-        }
+         }
+     }
     }

@@ -8,63 +8,90 @@ public class GunScript : MonoBehaviour
 {
     [Header("弾撃つ関連")]
     [SerializeField] public GunBulletScript bullet;　　//弾
-    [SerializeField] private Transform shotPosition; 　//発射位置
+    [SerializeField] public Transform shotPosition; 　//発射位置
     [SerializeField] public  float range = 50.0f;      //レイの飛ぶ距離
-
-
     [SerializeField] Enemy enemy;
     [SerializeField] PlayerMove player;
+    [SerializeField] public float shotInterval = 1.0f;
+    public float lastShotTime = 0.0f;
 
+    [Header("銃の回転")]
+    [SerializeField] private float rotateSpeed = 50.0f;  //回転の速さ
+    private bool isParent = false;       //ペアレントされたかどうか
+
+    [Header("爆弾に当たったら")]
+    [SerializeField] public Explosion explosion;
+    private cameraScript camera;
     // Start is called before the first frame update
     void Start()
     {
-
+        camera = Camera.main.GetComponent<cameraScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (isParent == false)
+        {
+            RotateGun();
+        }
     }
+
+
+    //銃の回転-------------------------------------------------
+    private void RotateGun()
+    {
+        transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
+    }
+    public void SetParented(bool parented) { isParent = parented; }
+
 
     public virtual void Shot()
     {
-        //弾の生成
-        GunBulletScript obj = Instantiate(bullet, transform.position, Quaternion.identity);
-
-       
-        //レイの設定
-        Ray ray = new Ray(shotPosition.position, shotPosition.forward);
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        Vector3 hitPosition = Vector3.zero;
-
-        //当たったら--------------------------------------------------
-        if (Physics.Raycast(ray, out hit, range))
+        if (Time.time >= lastShotTime + shotInterval)
         {
-            // 何かにヒットした場合の処理
-            Debug.Log(hit.transform.name);
-            hitPosition = hit.point;
+            //弾の生成-------------------------------
+            GunBulletScript obj = Instantiate(bullet, transform.position, Quaternion.identity);
 
-            if (hit.collider.CompareTag("Switch"))
+
+            //レイの設定----------------------------
+            Ray ray = new Ray(shotPosition.position, shotPosition.forward);
+            RaycastHit hit;
+            Vector3 hitPosition = Vector3.zero;
+
+            //当たったら--------------------------------------------------
+            if (Physics.Raycast(ray, out hit, range))
             {
-                Destroy(hit.collider.gameObject);
+                // 何かにヒットした場合の処理
+                Debug.Log(hit.transform.name);
+                hitPosition = hit.point;
+
+                if (hit.collider.CompareTag("Switch"))
+                {
+                    Destroy(hit.collider.gameObject);
+                }
+
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    enemy.Hp -= 1.0f;
+                }
+
+                if (hit.collider.CompareTag("Bom"))
+                {
+                    Destroy(hit.collider.gameObject);
+                    camera.StartShake(0.5f, 0.5f);
+                    Explosion objEx=Instantiate(explosion, hit.collider.transform.position, Quaternion.identity);  
+
+                }
+            }
+            else
+            {
+                hitPosition = shotPosition.position + shotPosition.forward * range;
             }
 
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                enemy.Hp -= 1.0f;
-            }
-
+            obj.SetUp(shotPosition.position, hitPosition);
+            lastShotTime = Time.time;
         }
-        else
-        {
-
-            hitPosition = shotPosition.position + shotPosition.forward * range;
-        }
-        
-        obj.SetUp(shotPosition.position, hitPosition);
     }
 
 }

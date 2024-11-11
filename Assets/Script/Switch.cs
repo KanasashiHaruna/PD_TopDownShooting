@@ -24,6 +24,7 @@ public class Switch : MonoBehaviour
         if (collider.gameObject.CompareTag("Bullet"))
         {
             Destroy(gameObject);
+            Destroy(collider.gameObject);
         }
     }
 }

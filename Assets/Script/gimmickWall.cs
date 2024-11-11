@@ -26,10 +26,7 @@ public class gimmickWall : MonoBehaviour
                 allNull = false;
                 break;
             }
-            //else
-            //{
-            //    transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
-            //}
+            
         }
 
         if (allNull) {

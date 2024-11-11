@@ -29,8 +29,8 @@ public class EnemyGun : GunScript
             Debug.Log("クールタイム中です。"); 
             return; 
         }
-
-        range = 5.0f;
+        shotInterval = 0.3f;
+        //range = 5.0f;
         base.Shot();
 
         shotsFired++;

@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text space;
     [SerializeField] private bool isReset = false;
     [SerializeField] PlayerMove player;
+    //public CameraShake/ cameraShake;
 
 
     // Start is called beforf;he first frame update
@@ -27,9 +28,13 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.transform.position.z >= 70.0f)
-        {
-            FeadAction();
+       if (player.transform.position.z >= 153.0f)
+       {
+           FeadAction();
+
+            Vector3 newPosition = player.transform.position;
+            newPosition.z += 3.0f * Time.deltaTime;
+            player.transform.position = newPosition;
         }
         if(isReset && Input.GetKeyDown(KeyCode.Space))
         {
@@ -53,4 +58,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); // Œ»İ‚ÌƒV[ƒ“‚ğÄ“Ç‚İ‚İ
     }
+
+    
 }

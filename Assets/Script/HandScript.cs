@@ -45,10 +45,15 @@ public class HandScript : MonoBehaviour
     //e‚ğƒnƒ“ƒh‚É‚Â‚¯‚é
     public void SetGun(GunScript chilGun, Vector3 position, Quaternion rotation)
     {
+        if (gun != null)
+        {
+            Destroy(gun.gameObject);
+        }
+
         gun = chilGun;
-        //gun.transform.SetParent(transform); 
         gun.transform.localPosition = position;
         gun.transform.localRotation = rotation;
+        gun.SetParented(true);
     }
 
     //e‚ğŒ‚‚Â
