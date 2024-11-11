@@ -39,12 +39,12 @@ public class Gure : MonoBehaviour
             Explosion obj = Instantiate(ex, transform.position, Quaternion.identity);
         }
 
-        if (collision.gameObject.CompareTag("Bom"))
-        {
-            camera.StartShake(0.5f, 0.5f);
-            Destroy(this.gameObject);
-            Explosion obj = Instantiate(ex, transform.position, Quaternion.identity);
-        }
+        //if (collision.gameObject.CompareTag("Bom"))
+        //{
+        //    camera.StartShake(0.5f, 0.5f);
+        //    Destroy(this.gameObject);
+        //    Explosion obj = Instantiate(ex, transform.position, Quaternion.identity);
+        //}
 
         if (collision.gameObject.CompareTag("Enemy"))
         {

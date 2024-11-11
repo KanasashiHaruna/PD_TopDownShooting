@@ -78,7 +78,7 @@ public class GunBulletScript : MonoBehaviour
        if (collision.gameObject.CompareTag("Wall"))
        {
            Destroy(gameObject);
-           Destroy(lineRenderer);
+           //Destroy(lineRenderer);
        }
        
     }

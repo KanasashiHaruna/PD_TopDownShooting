@@ -21,6 +21,7 @@ public class GunScript : MonoBehaviour
 
     [Header("”š’e‚É“–‚½‚Á‚½‚ç")]
     [SerializeField] public Explosion explosion;
+    //[SerializeField] public BomScript bom;
     private cameraScript camera;
     // Start is called before the first frame update
     void Start()
@@ -75,6 +76,12 @@ public class GunScript : MonoBehaviour
                 {
                     hit.collider.gameObject.GetComponent<Enemy>().DecreaseHp(1.0f);
 
+                }
+
+                if (hit.collider.CompareTag("Bom"))
+                {
+                    //Destroy(hit.collider.gameObject);
+                    hit.collider.gameObject.GetComponent<BomScript>().Explosion();
                 }
             }
             else

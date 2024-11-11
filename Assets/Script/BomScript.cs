@@ -19,14 +19,10 @@ public class BomScript : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider collision)
+   public void Explosion()
     {
-        if (collision.gameObject.CompareTag("Bullet"))
-        {
-            Explosion objEx = Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-            camera.StartShake(0.5f, 0.5f);
-        }
-
+        Instantiate(explosion,transform.position,Quaternion.identity);
+        Destroy(this.gameObject);
+       
     }
 }
